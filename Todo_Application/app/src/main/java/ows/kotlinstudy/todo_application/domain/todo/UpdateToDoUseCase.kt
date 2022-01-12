@@ -8,7 +8,7 @@ internal class UpdateToDoUseCase(
     private val toDoRepository: ToDoRepository
 ) : UseCase{
 
-    suspend operator fun invoke(toDoEntity: ToDoEntity): Boolean{
-        return toDoRepository.updateToDoItem(toDoEntity)
+    suspend operator fun invoke(toDoEntity: ToDoEntity){
+        toDoRepository.updateToDoItem(toDoEntity)
     }
 }
