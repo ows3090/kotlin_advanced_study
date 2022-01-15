@@ -1,6 +1,8 @@
 package ows.kotlinstudy.shopping_application.di
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ows.kotlinstudy.shopping_application.data.network.buildOkHttpClient
 import ows.kotlinstudy.shopping_application.data.network.provideGsonConverterFactory
@@ -9,6 +11,9 @@ import ows.kotlinstudy.shopping_application.data.network.provideProductRetrofit
 import ows.kotlinstudy.shopping_application.data.repository.DefaultProductRepository
 import ows.kotlinstudy.shopping_application.data.repository.ProductRepository
 import ows.kotlinstudy.shopping_application.domain.GetProductItemUseCase
+import ows.kotlinstudy.shopping_application.presentation.list.ProductListViewModel
+import ows.kotlinstudy.shopping_application.presentation.main.MainViewModel
+import ows.kotlinstudy.shopping_application.presentation.profile.ProfileViewModel
 
 
 val appModule = module {
@@ -27,6 +32,11 @@ val appModule = module {
 
     // UseCases
     factory { GetProductItemUseCase(get()) }
+
+    // ViewModels
+    viewModel { MainViewModel() }
+    viewModel { ProductListViewModel() }
+    viewModel { ProfileViewModel() }
 
 
 }
