@@ -17,7 +17,7 @@ data class ProductResponse(
             id = id.toLong(),
             createdAt = Date(createdAt),
             productName = productName,
-            productPrice = productPrice.toInt(),
+            productPrice = productPrice.toDouble().toInt(),
             productImage = productImage,
             productType = productType,
             productIntroductionImage = productIntroductionImage

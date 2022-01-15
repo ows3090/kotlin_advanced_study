@@ -11,6 +11,7 @@ import ows.kotlinstudy.shopping_application.data.network.provideProductRetrofit
 import ows.kotlinstudy.shopping_application.data.repository.DefaultProductRepository
 import ows.kotlinstudy.shopping_application.data.repository.ProductRepository
 import ows.kotlinstudy.shopping_application.domain.GetProductItemUseCase
+import ows.kotlinstudy.shopping_application.domain.GetProductListUseCase
 import ows.kotlinstudy.shopping_application.presentation.list.ProductListViewModel
 import ows.kotlinstudy.shopping_application.presentation.main.MainViewModel
 import ows.kotlinstudy.shopping_application.presentation.profile.ProfileViewModel
@@ -32,10 +33,11 @@ val appModule = module {
 
     // UseCases
     factory { GetProductItemUseCase(get()) }
+    factory { GetProductListUseCase(get()) }
 
     // ViewModels
     viewModel { MainViewModel() }
-    viewModel { ProductListViewModel() }
+    viewModel { ProductListViewModel(get()) }
     viewModel { ProfileViewModel() }
 
 

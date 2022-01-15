@@ -2,4 +2,5 @@
     <string name="app_name">Shopping_Application</string>
     <string name="products">쇼핑</string>
     <string name="my">My</string>
+    <string name="empty_history_text">상품 리스트가 존재하지 않습니다.</string>
 </resources>
