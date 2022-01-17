@@ -10,6 +10,8 @@ import ows.kotlinstudy.shopping_application.databinding.FragmentProductListBindi
 import ows.kotlinstudy.shopping_application.extension.toast
 import ows.kotlinstudy.shopping_application.presentation.BaseFragment
 import ows.kotlinstudy.shopping_application.presentation.adapter.ProductListAdapter
+import ows.kotlinstudy.shopping_application.presentation.detail.ProductDetailActivity
+import ows.kotlinstudy.shopping_application.presentation.main.MainActivity
 
 internal class ProductListFragment: BaseFragment<ProductListViewModel, FragmentProductListBinding>() {
 
@@ -25,7 +27,11 @@ internal class ProductListFragment: BaseFragment<ProductListViewModel, FragmentP
 
     private val startProductDetailResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result: ActivityResult ->
-            // TODO
+            // TODO 성공적으로 처리 완료 이후 동작
+
+            if(result.resultCode == ProductDetailActivity.PRODUCT_ORDERED_RESULT_CODE){
+                (requireActivity() as MainActivity).viewModel.refreshOrderList()
+            }
         }
 
     override fun observeData() = viewModel.productListStateLiveData.observe(this){
@@ -67,15 +73,15 @@ internal class ProductListFragment: BaseFragment<ProductListViewModel, FragmentP
             emptyResultTextView.isGone = true
             recyclerView.isGone = false
             adapter.setProductList(state.productList){
-//                startProductDetailResult.launch{
-//                    ProductDetailActivity.newIntent(requireContext(), it.id)
-//                }
-                requireContext().toast("Product Entity : ${it}")
+                startProductDetailResult.launch(
+                    ProductDetailActivity.newIntent(requireContext(), it.id)
+                )
             }
         }
     }
 
     private fun handleErrorState() {
         Toast.makeText(requireContext(), "에러가 발생했습니", Toast.LENGTH_SHORT).show()
+        
     }
 }
