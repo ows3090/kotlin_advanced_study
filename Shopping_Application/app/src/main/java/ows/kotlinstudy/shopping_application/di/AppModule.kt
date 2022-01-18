@@ -11,6 +11,7 @@ import ows.kotlinstudy.shopping_application.data.network.buildOkHttpClient
 import ows.kotlinstudy.shopping_application.data.network.provideGsonConverterFactory
 import ows.kotlinstudy.shopping_application.data.network.provideProductApiService
 import ows.kotlinstudy.shopping_application.data.network.provideProductRetrofit
+import ows.kotlinstudy.shopping_application.data.preference.PreferenceManager
 import ows.kotlinstudy.shopping_application.data.repository.DefaultProductRepository
 import ows.kotlinstudy.shopping_application.data.repository.ProductRepository
 import ows.kotlinstudy.shopping_application.domain.GetProductItemUseCase
@@ -44,11 +45,13 @@ val appModule = module {
     // ViewModels
     viewModel { MainViewModel() }
     viewModel { ProductListViewModel(get()) }
-    viewModel { ProfileViewModel() }
+    viewModel { ProfileViewModel(get()) }
     viewModel { (productId: Long) -> ProductDetailViewModel(productId, get(), get()) }
 
     // Database
     single { provideDB(androidApplication()) }
     single { provideToDao(get()) }
+
+    single { PreferenceManager(androidApplication()) }
 
 }

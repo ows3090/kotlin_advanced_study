@@ -4,4 +4,7 @@
     <string name="my">My</string>
     <string name="empty_history_text">상품 리스트가 존재하지 않습니다.</string>
     <string name="order">주문하기</string>
+    <string name="logout">로그아웃</string>
+    <string name="google_login_required">구글 로그인이 필요합니다</string>
+    <string name="firebase_web_client_id">1076048945163-sfnsasmgpqqftclpnjf99jc9qjcu5r29.apps.googleusercontent.com</string>
 </resources>
