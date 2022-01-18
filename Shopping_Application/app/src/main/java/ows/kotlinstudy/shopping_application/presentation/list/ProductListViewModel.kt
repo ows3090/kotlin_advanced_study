@@ -3,8 +3,10 @@ package ows.kotlinstudy.shopping_application.presentation.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ows.kotlinstudy.shopping_application.domain.GetProductListUseCase
 import ows.kotlinstudy.shopping_application.presentation.BaseViewModel
 

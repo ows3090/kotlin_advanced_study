@@ -2,6 +2,7 @@ package ows.kotlinstudy.shopping_application.presentation.profile
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isGone
@@ -10,10 +11,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthCredential
+import com.google.firebase.auth.GoogleAuthProvider
 import org.koin.android.ext.android.inject
 import ows.kotlinstudy.shopping_application.R
 import ows.kotlinstudy.shopping_application.databinding.FragmentProfileBinding
+import ows.kotlinstudy.shopping_application.extension.loadCenterCrop
+import ows.kotlinstudy.shopping_application.extension.toast
 import ows.kotlinstudy.shopping_application.presentation.BaseFragment
+import ows.kotlinstudy.shopping_application.presentation.adapter.ProductListAdapter
+import ows.kotlinstudy.shopping_application.presentation.detail.ProductDetailActivity
 
 internal class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileBinding>() {
 
@@ -37,6 +44,8 @@ internal class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileB
 
     private val firebaseAuth by lazy { FirebaseAuth.getInstance() }
 
+    private val adapter = ProductListAdapter()
+
     private val loginLaucher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -44,8 +53,7 @@ internal class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileB
                 try {
                     task.getResult(ApiException::class.java)?.let {
                         Log.e(TAG, "firebasewithGoogle : ${it.id}")
-
-                        // TODO saveToken
+                        viewModel.saveToken(it.idToken ?: throw Exception())
                     } ?: throw Exception()
                 }catch (e: Exception){
                     e.printStackTrace()
@@ -57,19 +65,20 @@ internal class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileB
         when(it){
             is ProfileState.Uninitialized -> initViews()
             is ProfileState.Loading -> handleLoadingState()
-            is ProfileState.Login -> TODO()
+            is ProfileState.Login -> handleLoginState(it)
             is ProfileState.Success -> handleSuccessState(it)
-            is ProfileState.Error -> TODO()
+            is ProfileState.Error -> handleErrorState()
         }
     }
 
     private fun initViews() = with(binding) {
+        recyclerView.adapter = adapter
         loginButton.setOnClickListener {
             signInGoogle()
         }
 
         logoutButton.setOnClickListener {
-
+            viewModel.signOut()
         }
     }
 
@@ -87,7 +96,7 @@ internal class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileB
         progressBar.isGone = true
         when(state){
             is ProfileState.Success.Registered -> {
-                // TODO
+                handleRegisteredState(state)
             }
             is ProfileState.Success.NotRegistered -> {
                 profileGroup.isGone = true
@@ -95,5 +104,45 @@ internal class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileB
             }
         }
     }
+
+    private fun handleLoginState(state: ProfileState.Login) = with(binding){
+        progressBar.isVisible = true
+        val credential = GoogleAuthProvider.getCredential(state.idToken,null)
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()){ task->
+                if(task.isSuccessful){
+                    val user = firebaseAuth.currentUser
+                    viewModel.setUserInfo(user)
+                }else{
+                    viewModel.setUserInfo(null)
+                }
+            }
+    }
+
+    private fun handleRegisteredState(state: ProfileState.Success.Registered) = with(binding){
+        profileGroup.isVisible = true
+        loginRequiredGroup.isGone = true
+        profileImageView.loadCenterCrop(state.profileImageUrl.toString(), 60f)
+        userNameTextView.text = state.userName
+
+        if(state.productList.isEmpty()){
+            emptyResultTextView.isGone = false
+            recyclerView.isGone = true
+        }else{
+            emptyResultTextView.isGone = true
+            recyclerView.isGone = false
+            adapter.setProductList(state.productList){
+                startActivity(
+                    ProductDetailActivity.newIntent(requireContext(), it.id)
+                )
+            }
+        }
+    }
+
+    private fun handleErrorState(){
+        requireActivity().toast("에러가 발생했습니다")
+    }
+
+
 
 }

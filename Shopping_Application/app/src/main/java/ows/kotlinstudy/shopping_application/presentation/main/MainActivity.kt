@@ -9,6 +9,7 @@ import org.koin.android.ext.android.inject
 import ows.kotlinstudy.shopping_application.R
 import ows.kotlinstudy.shopping_application.databinding.ActivityMainBinding
 import ows.kotlinstudy.shopping_application.presentation.BaseActivity
+import ows.kotlinstudy.shopping_application.presentation.BaseFragment
 import ows.kotlinstudy.shopping_application.presentation.list.ProductListFragment
 import ows.kotlinstudy.shopping_application.presentation.profile.ProfileFragment
 
@@ -65,6 +66,7 @@ internal class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>()
                 val fragment = supportFragmentManager.findFragmentByTag(ProfileFragment.TAG)
 
                 // TODO fragment BaseFragment 타입 캐스팅 fetchData()
+                (fragment as? BaseFragment<*, *>)?.viewModel?.fetchData()
             }
         }
     }

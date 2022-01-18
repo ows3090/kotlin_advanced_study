@@ -14,9 +14,7 @@ import ows.kotlinstudy.shopping_application.data.network.provideProductRetrofit
 import ows.kotlinstudy.shopping_application.data.preference.PreferenceManager
 import ows.kotlinstudy.shopping_application.data.repository.DefaultProductRepository
 import ows.kotlinstudy.shopping_application.data.repository.ProductRepository
-import ows.kotlinstudy.shopping_application.domain.GetProductItemUseCase
-import ows.kotlinstudy.shopping_application.domain.GetProductListUseCase
-import ows.kotlinstudy.shopping_application.domain.OrderProductItemUseCase
+import ows.kotlinstudy.shopping_application.domain.*
 import ows.kotlinstudy.shopping_application.presentation.detail.ProductDetailViewModel
 import ows.kotlinstudy.shopping_application.presentation.list.ProductListViewModel
 import ows.kotlinstudy.shopping_application.presentation.main.MainViewModel
@@ -41,11 +39,13 @@ val appModule = module {
     factory { GetProductItemUseCase(get()) }
     factory { GetProductListUseCase(get()) }
     factory { OrderProductItemUseCase(get()) }
+    factory { GetOrderedProductListUseCase(get()) }
+    factory { DeleteOrderedProductListUseCase(get()) }
 
     // ViewModels
     viewModel { MainViewModel() }
     viewModel { ProductListViewModel(get()) }
-    viewModel { ProfileViewModel(get()) }
+    viewModel { ProfileViewModel(get(), get(),get()) }
     viewModel { (productId: Long) -> ProductDetailViewModel(productId, get(), get()) }
 
     // Database
