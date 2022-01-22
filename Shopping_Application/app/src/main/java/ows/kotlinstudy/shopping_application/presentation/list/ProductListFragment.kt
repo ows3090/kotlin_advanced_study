@@ -49,6 +49,7 @@ internal class ProductListFragment: BaseFragment<ProductListViewModel, FragmentP
                 handleErrorState()
             }
         }
+
     }
 
     private fun initViews() = with(binding){

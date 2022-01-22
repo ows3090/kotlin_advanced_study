@@ -1,6 +1,7 @@
 package ows.kotlinstudy.shopping_application.presentation.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
