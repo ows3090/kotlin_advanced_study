@@ -30,7 +30,53 @@
 ### OAuth 인증 흐름
 ![image](https://user-images.githubusercontent.com/34837583/150628393-96204ba1-812c-4f8d-ac38-48996ff2aec2.png)
 
-<br>
 Authorization Server에서 Resource Server로 요청 시 파라미터로 Client ID, Client Password, Redirect URL을 전달하게 됩니다.
 그림 상 Client ID, Client Password를 구하는 시점이 나오지 않았는데 이것은 개발자가 제 3장의 서비스의 특정 기능들을 이용하기 위해서 미리 발급받은 정보입니다.
+
+<br>
+
+### Firebase에 구글 로그인 연동
+
+```kotlin
+	private val gso: GoogleSignInOptions by lazy {
+        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.firebase_web_client_id))
+            .requestEmail()
+            .build()
+    }
+
+```
+
+여기서 firebase_web_client_id 값이 Client에서 구글 서비스를 이용하기 위한 Client_ID입니다.
+
+```kotlin
+	private val loginLaucher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                try {
+                    task.getResult(ApiException::class.java)?.let {
+                        Log.e(TAG, "firebasewithGoogle : ${it.id}")
+                        viewModel.saveToken(it.idToken ?: throw Exception())
+                    } ?: throw Exception()
+                }catch (e: Exception){
+                    e.printStackTrace()
+                }
+            }
+        }
+```
+
+이후 GoogleSignInClien에서 intent를 가져와서 구글 로그인을 실행시키고 콜백으로 위의 코드가 호출됩니다.
+여기서 getSignedInAccoutFromIntent 메소드를 호출하여 GoogleSignInAccount 인스턴스를 가져올 수 있습니다.
+이를 이용하면 idToken, 구글 서비스를 이용하기 위한 AccessToken을 획득하게 됩니다.
+
+
+
+
+
+
+
+
+
+
 
