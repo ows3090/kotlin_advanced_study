@@ -2,6 +2,7 @@
 
 ![image](https://user-images.githubusercontent.com/34837583/150627562-167a8e33-6165-4de5-9509-d476587b6655.png)
 출처 : https://velog.io/@denmark-choco/OAuth-2
+
 <br>
 
 
@@ -27,6 +28,7 @@
 ### OAuth 인증 흐름
 ![image](https://user-images.githubusercontent.com/34837583/150628393-96204ba1-812c-4f8d-ac38-48996ff2aec2.png)
 
+<br>
 Authorization Server에서 Resource Server로 요청 시 파라미터로 Client ID, Client Password, Redirect URL을 전달하게 됩니다.
 그림 상 Client ID, Client Password를 구하는 시점이 나오지 않았는데 이것은 개발자가 제 3장의 서비스의 특정 기능들을 이용하기 위해서 미리 발급받은 정보입니다.
 
