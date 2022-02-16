@@ -7,12 +7,14 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.util.Log
 import ows.kotlinstudy.camera_application.R
 import java.io.File
 
 object PathUtil {
 
     fun getOutputDirectory(activity: Activity): File = with(activity){
+        Log.d("msg", "externalMediaDirs ${externalMediaDirs}")
         val mediaDir = externalMediaDirs.firstOrNull()?.let {
             File(it, getString(R.string.app_name)).apply { mkdir() }
         }
@@ -21,19 +23,25 @@ object PathUtil {
     }
 
     fun getPath(context: Context, uri: Uri): String? {
+        // android에서 4.4(api 19) 이후부터 SAF가 도입되어 문서 제공자 전체에서 문서를 탐색하고, 여는 작업을 손쉽게 도와
+        // DocumentProvider에서 지원하는 URI인지 확인
         if(DocumentsContract.isDocumentUri(context, uri)){
             if(isExternalStorageDocument(uri)){
                 val docId = DocumentsContract.getDocumentId(uri)
+                Log.d("msg","docId : ${docId}")
+
                 val split = docId.split(":").toTypedArray()
                 val type = split[0]
                 if("primary".equals(type, ignoreCase = true)){
+                    Log.d("msg","getExternalFilesDir : ${context.getExternalFilesDir(null)?.absolutePath.toString() + "/" + split[1]}")
                     return context.getExternalFilesDir(null)?.absolutePath.toString() + "/"+split[1]
                 }
             }else if(isDownloadsDocument(uri)){
                 val id = DocumentsContract.getDocumentId(uri)
                 val contentUri = ContentUris.withAppendedId(
-                    Uri.parse("content://downloads/public_downloads"), id.toLong())
+                    Uri.parse("content://downloads/public_downloads"), id.toLong()
                 )
+
                 return getDataColumn(context, contentUri, null, null)
             }else if(isMediaDocument(uri)){
                 val docId = DocumentsContract.getDocumentId(uri)
