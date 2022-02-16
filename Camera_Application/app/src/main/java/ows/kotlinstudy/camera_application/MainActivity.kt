@@ -26,6 +26,7 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
+import androidx.viewpager2.widget.ViewPager2
 import ows.kotlinstudy.camera_application.databinding.ActivityMainBinding
 import ows.kotlinstudy.camera_application.extensions.loadCenterCrop
 import ows.kotlinstudy.camera_application.util.PathUtil
@@ -156,6 +157,7 @@ class MainActivity : AppCompatActivity() {
                 bindCaptureListener()
                 bindZoomListener()
                 initFlashAndAddListener()
+                bindPreviewImageViewClickListener()
             } catch (e: Exception){
                 e.printStackTrace()
             }
@@ -262,6 +264,14 @@ class MainActivity : AppCompatActivity() {
         val hasFlash = camera?.cameraInfo?.hasFlashUnit() ?: false
         if(hasFlash){
             camera?.cameraControl?.enableTorch(light)
+        }
+    }
+
+    private fun bindPreviewImageViewClickListener() = with(binding){
+        previewImageVIew.setOnClickListener {
+            startActivity(
+                ImageListActivity.newIntent(this@MainActivity, uriList)
+            )
         }
     }
 

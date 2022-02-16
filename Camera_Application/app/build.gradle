@@ -59,4 +59,7 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'jp.wasabeef:glide-transformations:4.0.0'
 
+    // Circle Indicator
+    implementation 'me.relex:circleindicator:2.1.6'
+
 }
