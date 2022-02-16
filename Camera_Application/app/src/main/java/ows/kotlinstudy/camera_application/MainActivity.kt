@@ -1,6 +1,7 @@
 package ows.kotlinstudy.camera_application
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -12,6 +13,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +25,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import ows.kotlinstudy.camera_application.databinding.ActivityMainBinding
 import ows.kotlinstudy.camera_application.extensions.loadCenterCrop
 import ows.kotlinstudy.camera_application.util.PathUtil
@@ -56,6 +60,7 @@ class MainActivity : AppCompatActivity() {
     private var root: View? = null
 
     private var isCapturing: Boolean = false
+    private var isFlashEnabled: Boolean = false
 
     private var contentUri: Uri? = null
 
@@ -91,6 +96,12 @@ class MainActivity : AppCompatActivity() {
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
             )
         }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            Log.d("msg","getDataDir : ${dataDir.absolutePath}")
+        }
+        Log.d("msg","getFileDir : ${filesDir.absolutePath}")
+        Log.d("msg","getCacheDir : ${cacheDir.absolutePath}")
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -143,10 +154,45 @@ class MainActivity : AppCompatActivity() {
                 // preview가 보여질 Surface 설정
                 preview.setSurfaceProvider(viewFinder.surfaceProvider)
                 bindCaptureListener()
+                bindZoomListener()
+                initFlashAndAddListener()
             } catch (e: Exception){
                 e.printStackTrace()
             }
         }, cameraMainExecutor)
+    }
+
+    // Touch 이벤트 시 Click 이벤트는 performClick을 호출해야 접근성이 높아짐
+    // performClick 메소드를 호출하지 않을 시는 Lint Warning 출
+    @SuppressLint("ClickableViewAccessibility")
+    private fun bindZoomListener() = with(binding){
+        val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener(){
+            override fun onScale(detector: ScaleGestureDetector): Boolean {
+                val currentZoomRatio = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 1f
+                val delta = detector.scaleFactor
+                camera?.cameraControl?.setZoomRatio(currentZoomRatio*delta)
+                return super.onScale(detector)
+            }
+        }
+
+        val scaleGestureDetector = ScaleGestureDetector(this@MainActivity, listener)
+        viewFinder.setOnTouchListener { v, event ->
+            scaleGestureDetector.onTouchEvent(event)
+            return@setOnTouchListener true
+        }
+    }
+
+    private fun initFlashAndAddListener() = with(binding){
+        val hasFlash = camera?.cameraInfo?.hasFlashUnit() ?: false
+        flashSwitch.isGone = hasFlash.not()
+        if(hasFlash){
+            flashSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+                isFlashEnabled = isChecked
+            }
+        }else{
+            isFlashEnabled = false
+            flashSwitch.setOnCheckedChangeListener(null)
+        }
     }
 
     private fun bindCaptureListener() = with(binding){
@@ -162,15 +208,18 @@ class MainActivity : AppCompatActivity() {
         contentUri?.let {
             isCapturing = try{
                 val file = File(PathUtil.getPath(this, it) ?: throw FileNotFoundException())
+                Log.d("msg","updateSavedImageContent ${file.path}")
                 MediaScannerConnection.scanFile(this, arrayOf(file.path), arrayOf("image/jpeg"),null)
                 Handler(mainLooper).post{
                     binding.previewImageVIew.loadCenterCrop(url = it.toString(), corner = 4f)
-                    uriList.add(it)
                 }
+                uriList.add(it)
+                flashLight(false)
                 false
             } catch (e: Exception){
                 e.printStackTrace()
                 Toast.makeText(this, "파일이 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
+                flashLight(false)
                 false
             }
         }
@@ -189,8 +238,12 @@ class MainActivity : AppCompatActivity() {
         )
 
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+        if(isFlashEnabled) flashLight(true)
         imageCapture.takePicture(outputOptions, cameraExecutor, object: ImageCapture.OnImageSavedCallback{
+            // MediaStore를 통해 저장한다면 outputFileResults not null
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                Log.d("msg","outputFilErsult : ${outputFileResults.savedUri}")
+                Log.d("msg","Uri fromFile : ${Uri.fromFile(photoFile)}")
                 val savedUri = outputFileResults.savedUri ?: Uri.fromFile(photoFile)
                 contentUri = savedUri
                 updateSavedImageContent()
@@ -199,9 +252,17 @@ class MainActivity : AppCompatActivity() {
             override fun onError(exception: ImageCaptureException) {
                 exception.printStackTrace()
                 isCapturing = false
+                flashLight(false)
             }
         })
 
+    }
+
+    private fun flashLight(light: Boolean){
+        val hasFlash = camera?.cameraInfo?.hasFlashUnit() ?: false
+        if(hasFlash){
+            camera?.cameraControl?.enableTorch(light)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
