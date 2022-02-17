@@ -9,10 +9,7 @@ import android.content.pm.PackageManager
 import android.hardware.display.DisplayManager
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.util.Log
 import android.view.ScaleGestureDetector
 import android.view.View
@@ -98,11 +95,11 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-            Log.d("msg","getDataDir : ${dataDir.absolutePath}")
-        }
         Log.d("msg","getFileDir : ${filesDir.absolutePath}")
         Log.d("msg","getCacheDir : ${cacheDir.absolutePath}")
+        Log.d("msg","getExternalFileDir : ${getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)}")
+        Log.d("msg","getExternalCacheDir : ${externalCacheDir}")
+        Log.d("msg","getExternalMediaDir : ${externalMediaDirs.contentToString()}")
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -168,6 +165,7 @@ class MainActivity : AppCompatActivity() {
     // performClick 메소드를 호출하지 않을 시는 Lint Warning 출
     @SuppressLint("ClickableViewAccessibility")
     private fun bindZoomListener() = with(binding){
+        // 드래그/확대 리스너
         val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener(){
             override fun onScale(detector: ScaleGestureDetector): Boolean {
                 val currentZoomRatio = camera?.cameraInfo?.zoomState?.value?.zoomRatio ?: 1f
@@ -177,6 +175,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // 드래그/확대 detector에 리스너 등록
         val scaleGestureDetector = ScaleGestureDetector(this@MainActivity, listener)
         viewFinder.setOnTouchListener { v, event ->
             scaleGestureDetector.onTouchEvent(event)
@@ -211,6 +210,8 @@ class MainActivity : AppCompatActivity() {
             isCapturing = try{
                 val file = File(PathUtil.getPath(this, it) ?: throw FileNotFoundException())
                 Log.d("msg","updateSavedImageContent ${file.path}")
+
+                // 찍은 사진 반영
                 MediaScannerConnection.scanFile(this, arrayOf(file.path), arrayOf("image/jpeg"),null)
                 Handler(mainLooper).post{
                     binding.previewImageVIew.loadCenterCrop(url = it.toString(), corner = 4f)
