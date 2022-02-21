@@ -2,4 +2,7 @@
     <string name="app_name">SNS_Application</string>
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="image_preview">이미지 미리보기</string>
+    <string name="image_page">(%d/%d)</string>
 </resources>

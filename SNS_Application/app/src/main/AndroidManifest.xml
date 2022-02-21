@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SNS_Application">
+        <activity android:name=".photo.CameraActivity"/>
+        <activity android:name=".photo.ImageListActivity"/>
         <activity android:name=".chatdetail.ChatRoomActivity"></activity>
         <activity android:name=".home.ArticleAddActivity" />
         <activity
