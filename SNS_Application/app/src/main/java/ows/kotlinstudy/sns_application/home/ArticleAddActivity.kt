@@ -72,26 +72,21 @@ class ArticleAddActivity : AppCompatActivity() {
             showProgress()
 
             if (imageUriList.isNotEmpty()) {
+                lifecycleScope.launch {
+                    val results = uploadPhoto(imageUriList)
+                    uploadArticle(sellerId, title, content, results.filterIsInstance<String>())
 
-
-                uploadPhoto(imageUriList.first(),
-                    successHandler = { uri ->
-                        uploadArticle(sellerId, title, content, uri)
-                    },
-                    errorHandler = {
-                        Toast.makeText(this@ArticleAddActivity, "사진 업로드에 실패했습니다", Toast.LENGTH_LONG)
-                            .show()
-                        hideProgress()
-                    }
-                )
+                }
             } else {
-                uploadArticle(sellerId, title, content, "")
+                uploadArticle(sellerId, title, content, listOf())
             }
         }
     }
 
     private suspend fun uploadPhoto(uriList: List<Uri>) = withContext(Dispatchers.IO){
         val uploadDeferrend: List<Deferred<Any>> = uriList.mapIndexed{ index, uri ->
+            // lifecycleOwner의 Scope -> Activity Lifecycle이 끝날때 제거
+            // async를 호출하여 Deferred 객체 반환 -> await 로 대기 가
             lifecycleScope.async {
                 try{
                     val fileName = "image_${index}.png"
@@ -111,32 +106,11 @@ class ArticleAddActivity : AppCompatActivity() {
                 }
             }
         }
-
         return@withContext uploadDeferrend.awaitAll()
-        val fileName = "${System.currentTimeMillis()}.png"
-        // storage에 파일 쓰기
-        storage.reference.child("article/photo").child(fileName)
-            .putFile(uri)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-
-                    // downloadUrl 가져오기
-                    storage.reference.child("article/photo").child(fileName)
-                        .downloadUrl
-                        .addOnSuccessListener {
-                            successHandler(it.toString())
-                        }.addOnFailureListener {
-                            errorHandler()
-                        }
-
-                } else {
-                    errorHandler()
-                }
-            }
     }
 
-    private fun uploadArticle(sellerId: String, title: String, content: String, imageUri: String) {
-        val model = ArticleModel(sellerId, title, System.currentTimeMillis(), content, imageUri)
+    private fun uploadArticle(sellerId: String, title: String, content: String, imageUrlList: List<String>) {
+        val model = ArticleModel(sellerId, title, System.currentTimeMillis(), content, imageUrlList)
         articleDB.push().setValue(model)
         hideProgress()
         finish()
