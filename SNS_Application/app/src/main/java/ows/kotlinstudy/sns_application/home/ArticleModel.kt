@@ -1,7 +1,7 @@
 package ows.kotlinstudy.sns_application.home
 
 data class ArticleModel(
-    val sellerId: String,
+    val userId: String,
     val title: String,
     val createAt: Long,
     val content: String,

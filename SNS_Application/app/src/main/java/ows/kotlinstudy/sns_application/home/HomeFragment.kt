@@ -66,16 +66,16 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
             onItemClicked = { articleModel ->
                 if(auth.currentUser != null){
                     auth.currentUser?.uid?.let {
-                        if (auth.currentUser?.uid != articleModel.sellerId) {
+                        if (auth.currentUser?.uid != articleModel.userId) {
                             val chatRoom = ChatListItem(
                                 buyerId = it,
-                                sellerId = articleModel.sellerId,
+                                sellerId = articleModel.userId,
                                 itemTitle = articleModel.title,
                                 key = System.currentTimeMillis()
                             )
 
                             userDB.child(it).child(CHILD_CHAT).push().setValue(chatRoom)
-                            userDB.child(articleModel.sellerId).child(CHILD_CHAT).push().setValue(chatRoom)
+                            userDB.child(articleModel.userId).child(CHILD_CHAT).push().setValue(chatRoom)
 
                             Snackbar.make(view, "채팅방이 생성되었습니다. 채팅탭에서 확인해주세요", Snackbar.LENGTH_LONG).show()
                         }

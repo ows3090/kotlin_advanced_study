@@ -45,7 +45,7 @@ class ArticleAddActivity : AppCompatActivity() {
     // 실시간 데이터베이스
     private val articleDB: DatabaseReference by lazy { Firebase.database.reference.child(DB_ARTICLES) }
 
-    private val photoListAdapter = PhotoListAdapter{ uri -> removePhoto(uri)}
+    private val photoListAdapter = PhotoListAdapter { uri -> removePhoto(uri) }
     private lateinit var binding: ActivityArticleAddBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,28 +67,27 @@ class ArticleAddActivity : AppCompatActivity() {
         submitButton.setOnClickListener {
             val title = binding.titleEditText.text.toString()
             val content = binding.contentEditText.text.toString()
-            val sellerId = auth.currentUser?.uid.orEmpty()
+            val userId = auth.currentUser?.uid.orEmpty()
 
             showProgress()
 
             if (imageUriList.isNotEmpty()) {
                 lifecycleScope.launch {
                     val results = uploadPhoto(imageUriList)
-                    uploadArticle(sellerId, title, content, results.filterIsInstance<String>())
-
+                    afterUploadPhoto(results, title, content, userId)
                 }
             } else {
-                uploadArticle(sellerId, title, content, listOf())
+                uploadArticle(userId, title, content, listOf())
             }
         }
     }
 
-    private suspend fun uploadPhoto(uriList: List<Uri>) = withContext(Dispatchers.IO){
-        val uploadDeferrend: List<Deferred<Any>> = uriList.mapIndexed{ index, uri ->
+    private suspend fun uploadPhoto(uriList: List<Uri>) = withContext(Dispatchers.IO) {
+        val uploadDeferrend: List<Deferred<Any>> = uriList.mapIndexed { index, uri ->
             // lifecycleOwner의 Scope -> Activity Lifecycle이 끝날때 제거
             // async를 호출하여 Deferred 객체 반환 -> await 로 대기 가
             lifecycleScope.async {
-                try{
+                try {
                     val fileName = "image_${index}.png"
                     return@async storage
                         .reference
@@ -100,7 +99,7 @@ class ArticleAddActivity : AppCompatActivity() {
                         .downloadUrl
                         .await()
                         .toString()
-                }catch (e: Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                     return@async Pair(uri, e)
                 }
@@ -109,8 +108,41 @@ class ArticleAddActivity : AppCompatActivity() {
         return@withContext uploadDeferrend.awaitAll()
     }
 
-    private fun uploadArticle(sellerId: String, title: String, content: String, imageUrlList: List<String>) {
-        val model = ArticleModel(sellerId, title, System.currentTimeMillis(), content, imageUrlList)
+    private fun afterUploadPhoto(
+        results: List<Any>,
+        title: String,
+        content: String,
+        userId: String
+    ) {
+        val errorResults = results.filterIsInstance<Pair<Uri, Exception>>()
+        val successResults = results.filterIsInstance<String>()
+
+        when {
+            errorResults.isNotEmpty() && successResults.isNotEmpty() -> {
+                photoUploadErrorButContinueDialog(
+                    errorResults,
+                    successResults,
+                    title,
+                    content,
+                    userId
+                )
+            }
+            errorResults.isNotEmpty() && successResults.isEmpty() -> {
+                uploadError()
+            }
+            else -> {
+                uploadArticle(userId, title, content, successResults)
+            }
+        }
+    }
+
+    private fun uploadArticle(
+        userId: String,
+        title: String,
+        content: String,
+        imageUrlList: List<String>
+    ) {
+        val model = ArticleModel(userId, title, System.currentTimeMillis(), content, imageUrlList)
         articleDB.push().setValue(model)
         hideProgress()
         finish()
@@ -171,7 +203,7 @@ class ArticleAddActivity : AppCompatActivity() {
                 }
             }
             CAMERA_REQUEST_CODE -> {
-                data?.let{ intent ->
+                data?.let { intent ->
                     val uriList = intent.getParcelableArrayListExtra<Uri>(URI_LIST_KEY)
                     uriList?.let { list ->
                         imageUriList.addAll(list)
@@ -240,7 +272,31 @@ class ArticleAddActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun removePhoto(uri: Uri){
+    private fun photoUploadErrorButContinueDialog(
+        errorResults: List<Pair<Uri, Exception>>,
+        successResults: List<String>,
+        title: String,
+        content: String,
+        userId: String
+    ) {
+        AlertDialog.Builder(this)
+            .setTitle("특정 이미지 업로드 실패")
+            .setMessage("업로드에 실패한 이미지가 있습니다." + errorResults.map { (uri, _) ->
+                "$uri\n"
+            } + "그럼에도 불구하고 업로드 하시겠습니까?")
+            .setPositiveButton("업로드") { _, _ ->
+                uploadArticle(userId, title, content, successResults)
+            }
+            .create()
+            .show()
+    }
+
+    private fun uploadError() {
+        Toast.makeText(this, "사진 업로드에 실패했습니다", Toast.LENGTH_SHORT).show()
+        hideProgress()
+    }
+
+    private fun removePhoto(uri: Uri) {
         imageUriList.remove(uri)
         photoListAdapter.setPhotoList(imageUriList)
     }
