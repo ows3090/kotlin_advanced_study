@@ -21,6 +21,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import ows.kotlinstudy.sns_application.DBKey.Companion.DB_ARTICLES
 import ows.kotlinstudy.sns_application.databinding.ActivityArticleAddBinding
+import ows.kotlinstudy.sns_application.gallery.GalleryActivity
 import ows.kotlinstudy.sns_application.photo.CameraActivity
 import ows.kotlinstudy.sns_application.photo.PhotoListAdapter
 
@@ -167,9 +168,10 @@ class ArticleAddActivity : AppCompatActivity() {
     }
 
     private fun startGalleryScreen() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+        startActivityForResult(
+            GalleryActivity.newIntent(this),
+            GALLERY_REQUEST_CODE
+        )
     }
 
     private fun startCameraScreen() {
@@ -193,12 +195,14 @@ class ArticleAddActivity : AppCompatActivity() {
 
         when (requestCode) {
             GALLERY_REQUEST_CODE -> {
-                val uri = data?.data
-                if (uri != null) {
-                    imageUriList.add(uri)
+                data?.let { intent ->
+                    val uriList = intent.getParcelableArrayListExtra<Uri>(URI_LIST_KEY)
+                    uriList?.let { list ->
+                        imageUriList.addAll(list)
 
-                    photoListAdapter.setPhotoList(imageUriList)
-                } else {
+                        photoListAdapter.setPhotoList(imageUriList)
+                    }
+                } ?: kotlin.run {
                     Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_LONG).show()
                 }
             }
@@ -210,6 +214,8 @@ class ArticleAddActivity : AppCompatActivity() {
 
                         photoListAdapter.setPhotoList(imageUriList)
                     }
+                } ?: kotlin.run {
+                    Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_LONG).show()
                 }
             }
             else -> {
