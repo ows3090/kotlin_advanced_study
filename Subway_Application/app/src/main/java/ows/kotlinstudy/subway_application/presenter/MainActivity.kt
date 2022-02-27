@@ -1,4 +1,4 @@
-package ows.kotlinstudy.subway_application
+package ows.kotlinstudy.subway_application.presenter
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,5 +11,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        initViews()
+    }
+
+    private fun initViews(){
+        setSupportActionBar(binding.toolbar)
     }
 }

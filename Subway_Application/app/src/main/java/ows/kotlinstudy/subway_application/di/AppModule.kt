@@ -14,14 +14,17 @@ import ows.kotlinstudy.subway_application.data.preference.PreferenceManager
 import ows.kotlinstudy.subway_application.data.preference.SharedPreferenceManager
 import ows.kotlinstudy.subway_application.data.repository.StationRepository
 import ows.kotlinstudy.subway_application.data.repository.StationRepositoryImpl
+import ows.kotlinstudy.subway_application.presenter.stations.StationsContract
+import ows.kotlinstudy.subway_application.presenter.stations.StationsFragment
+import ows.kotlinstudy.subway_application.presenter.stations.StationsPresenter
 
 val appModule = module {
 
     single { Dispatchers.IO }
 
     // Database
-    single { AppDatabase.build(androidApplication())
-    single { get<AppDatabase>().stationDao() }}
+    single { AppDatabase.build(androidApplication()) }
+    single { get<AppDatabase>().stationDao() }
 
     // Preference
     single { androidContext().getSharedPreferences("preference",Activity.MODE_PRIVATE) }
@@ -32,4 +35,9 @@ val appModule = module {
 
     // Repository
     single<StationRepository> { StationRepositoryImpl(get(), get(), get(), get()) }
+
+    // Presentation
+    scope<StationsFragment> {
+        scoped<StationsContract.Presenter> { StationsPresenter(getSource(), get()) }
+    }
 }
