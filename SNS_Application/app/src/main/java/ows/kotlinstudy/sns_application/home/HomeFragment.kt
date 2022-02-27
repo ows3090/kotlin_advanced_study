@@ -3,7 +3,9 @@ package ows.kotlinstudy.sns_application.home
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -47,25 +49,35 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         override fun onCancelled(error: DatabaseError) {}
     }
 
-    private var binding: FragmentHomeBinding? = null
+    // Fragment의 수명주기가 View의 수명주기보다 오래 지속
+
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
     private val auth: FirebaseAuth by lazy {
         Firebase.auth
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // onCreateView에서 R.layout.fragment_home으로 inflate
-        var fragmentHomeBinding = FragmentHomeBinding.bind(view)
-        binding = fragmentHomeBinding
-
         articleList.clear()
-        userDB = Firebase.database.reference.child(DB_USERS)
-        articleDB = Firebase.database.reference.child(DB_ARTICLES)
+
+        // 피드 목록 RecyclerVeiw Adapter
         articleAdapter = ArticleAdapter(
             onItemClicked = { articleModel ->
                 if(auth.currentUser != null){
                     auth.currentUser?.uid?.let {
+                        // 피드 올린사람과 사용자 일치 여부 판단
                         if (auth.currentUser?.uid != articleModel.userId) {
                             val chatRoom = ChatListItem(
                                 buyerId = it,
@@ -88,23 +100,36 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                 }
             }
         )
+        initFirebase()
+        initViews()
+        bindViews()
+    }
 
-        fragmentHomeBinding.articleRecyclerView.layoutManager = LinearLayoutManager(context)
-        fragmentHomeBinding.articleRecyclerView.adapter = articleAdapter
-
-        fragmentHomeBinding.addFloatingButton.setOnClickListener {
-            context?.let{
-                if(auth.currentUser != null){
-                    startActivity(Intent(requireContext(), ArticleAddActivity::class.java))
-                } else {
-                    Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_LONG).show()
-                }
-            }
-        }
+    private fun initFirebase(){
+        userDB = Firebase.database.reference.child(DB_USERS)
+        articleDB = Firebase.database.reference.child(DB_ARTICLES)
 
         // addListenerForSingleValueEvent() : 즉시성, 1회만 호출
         // addChildEventListener() : 이벤트가 발생할 때마다 호출
         articleDB.addChildEventListener(listener)
+    }
+
+    private fun initViews() = with(binding!!){
+        articleRecyclerView.layoutManager = LinearLayoutManager(context)
+        articleRecyclerView.adapter = articleAdapter
+    }
+
+    private fun bindViews() = with(binding!!){
+        addFloatingButton.setOnClickListener {
+            context?.let{
+                if(auth.currentUser != null){
+                    // 피드 등록 Activity Start
+                    startActivity(Intent(requireContext(), ArticleAddActivity::class.java))
+                } else {
+                    Snackbar.make(root, "로그인 후 사용해주세요", Snackbar.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -114,7 +139,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
+        _binding = null
         articleDB.removeEventListener(listener)
     }
 }
