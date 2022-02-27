@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "410581903074",
+    "project_id": "subwayapplication-bf49c",
+    "storage_bucket": "subwayapplication-bf49c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410581903074:android:3bee9d6bbb12aa911c60bb",
+        "android_client_info": {
+          "package_name": "ows.kotlinstudy.subway_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410581903074-dm3h29oa33ivp5v1t2t2gjskvhomtv8e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvfsuxlDABfzAJvcrSd8QG_8Oxg43Yfo8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "410581903074-dm3h29oa33ivp5v1t2t2gjskvhomtv8e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
