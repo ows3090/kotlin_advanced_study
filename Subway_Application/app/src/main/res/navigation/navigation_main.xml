@@ -16,7 +16,13 @@
     </fragment>
     <fragment
         android:id="@+id/station_arrivals_dest"
-        android:name="ows.kotlinstudy.subway_application.presenter.stationsArrivals.StationsArrivalsFragment"
-        android:label="StationsArrivalsFragment"
-        tools:layout="@layout/fragment_station_arrivals" />
+        android:name="ows.kotlinstudy.subway_application.presenter.stationsArrivals.StationArrivalsFragment"
+        android:label="StationArrivalsFragment"
+        tools:layout="@layout/fragment_station_arrivals" >
+
+        <argument
+            android:name="station"
+            app:argType="ows.kotlinstudy.subway_application.domain.Station"/>
+
+    </fragment>
 </navigation>

@@ -9,7 +9,9 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3802083333333333" />
         <entry key="app/src/main/res/layout/fragment_station_arrivals.xml" value="0.3802083333333333" />
         <entry key="app/src/main/res/layout/fragment_stations.xml" value="0.3802083333333333" />
+        <entry key="app/src/main/res/layout/item_arrival.xml" value="0.3802083333333333" />
         <entry key="app/src/main/res/layout/item_station.xml" value="0.3802083333333333" />
+        <entry key="app/src/main/res/menu/menu_station_arrivals.xml" value="0.3802083333333333" />
       </map>
     </option>
   </component>

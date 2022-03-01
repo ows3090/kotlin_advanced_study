@@ -22,6 +22,9 @@ import ows.kotlinstudy.subway_application.data.repository.StationRepositoryImpl
 import ows.kotlinstudy.subway_application.presenter.stations.StationsContract
 import ows.kotlinstudy.subway_application.presenter.stations.StationsFragment
 import ows.kotlinstudy.subway_application.presenter.stations.StationsPresenter
+import ows.kotlinstudy.subway_application.presenter.stationsArrivals.StationArrivalsContract
+import ows.kotlinstudy.subway_application.presenter.stationsArrivals.StationArrivalsFragment
+import ows.kotlinstudy.subway_application.presenter.stationsArrivals.StationArrivalsPresenter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
@@ -68,5 +71,9 @@ val appModule = module {
     // Presentation
     scope<StationsFragment> {
         scoped<StationsContract.Presenter> { StationsPresenter(getSource(), get()) }
+    }
+
+    scope<StationArrivalsFragment> {
+        scoped<StationArrivalsContract.Presenter> { StationArrivalsPresenter(getSource(), get(), get()) }
     }
 }
