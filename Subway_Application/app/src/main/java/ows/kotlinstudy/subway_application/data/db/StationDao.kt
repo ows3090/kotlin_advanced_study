@@ -28,4 +28,18 @@ interface StationDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCrossReference(reference : List<StationSubwayCrossRefEntity>)
+
+    @Transaction
+    suspend fun insertStationSubways(stationsSubways: List<Pair<StationEntity, SubwayEntity>>) {
+        insertStations(stationsSubways.map { it.first })
+        insertSubways(stationsSubways.map { it.second })
+        insertCrossReference(
+            stationsSubways.map { (station,subway) ->
+                StationSubwayCrossRefEntity(
+                    station.stationName,
+                    subway.subwayId
+                )
+            }
+        )
+    }
 }

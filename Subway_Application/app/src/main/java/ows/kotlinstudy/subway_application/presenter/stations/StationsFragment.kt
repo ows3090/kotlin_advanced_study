@@ -1,6 +1,7 @@
 package ows.kotlinstudy.subway_application.presenter.stations
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +59,7 @@ class StationsFragment: ScopeFragment(), StationsContract.View {
     }
 
     override fun showStations(stations: List<Station>) {
+        Log.d("msg","showStations ${stations}")
         (binding?.recyclerView?.adapter as? StationsAdapter)?.run{
             this.data = stations
             notifyDataSetChanged()

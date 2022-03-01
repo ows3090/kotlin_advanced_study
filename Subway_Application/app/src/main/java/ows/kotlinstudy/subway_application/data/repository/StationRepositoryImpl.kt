@@ -1,5 +1,6 @@
 package ows.kotlinstudy.subway_application.data.repository
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -33,17 +34,7 @@ class StationRepositoryImpl(
         val lastDatabaseUpdatedTimeMillis = preferenceManager.getLong(KEY_LAST_DATEBASE_UPDATED_TIME_MILLIS)
 
         if(lastDatabaseUpdatedTimeMillis == null || fileUpdatedTimeMillis > lastDatabaseUpdatedTimeMillis){
-            val stationSubways = stationApi.getStationSubways()
-            stationDao.insertStations(stationSubways.map{ it.first })
-            stationDao.insertSubways(stationSubways.map { it.second })
-            stationDao.insertCrossReference(
-                stationSubways.map { (station, subway) ->
-                    StationSubwayCrossRefEntity(
-                        station.stationName,
-                        subway.subwayId
-                    )
-                }
-            )
+            stationDao.insertStationSubways(stationApi.getStationSubways())
             preferenceManager.putLong(KEY_LAST_DATEBASE_UPDATED_TIME_MILLIS, fileUpdatedTimeMillis)
         }
     }
