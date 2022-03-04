@@ -19,6 +19,7 @@ import ows.kotlinstudy.subway_application.data.preference.PreferenceManager
 import ows.kotlinstudy.subway_application.data.preference.SharedPreferenceManager
 import ows.kotlinstudy.subway_application.data.repository.StationRepository
 import ows.kotlinstudy.subway_application.data.repository.StationRepositoryImpl
+import ows.kotlinstudy.subway_application.domain.Station
 import ows.kotlinstudy.subway_application.presenter.stations.StationsContract
 import ows.kotlinstudy.subway_application.presenter.stations.StationsFragment
 import ows.kotlinstudy.subway_application.presenter.stations.StationsPresenter
@@ -70,10 +71,11 @@ val appModule = module {
 
     // Presentation
     scope<StationsFragment> {
+        // scoped definition, create an object that persistent tied to the associated scope lifetime.
         scoped<StationsContract.Presenter> { StationsPresenter(getSource(), get()) }
     }
 
     scope<StationArrivalsFragment> {
-        scoped<StationArrivalsContract.Presenter> { StationArrivalsPresenter(getSource(), get(), get()) }
+        scoped<StationArrivalsContract.Presenter> { (station: Station) -> StationArrivalsPresenter(getSource(),station, get()) }
     }
 }

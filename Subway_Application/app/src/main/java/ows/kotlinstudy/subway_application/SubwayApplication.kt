@@ -13,6 +13,8 @@ class SubwayApplication: Application() {
     override fun onCreate() {
         super.onCreate()
 
+
+        // GlobalContext 에서 KoinApplication 실행
         startKoin {
             androidLogger(
                 if(BuildConfig.DEBUG) Level.DEBUG

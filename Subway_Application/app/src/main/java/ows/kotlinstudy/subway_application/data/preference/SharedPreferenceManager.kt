@@ -3,6 +3,9 @@ package ows.kotlinstudy.subway_application.data.preference
 import android.content.SharedPreferences
 import androidx.core.content.edit
 
+/**
+ * station_data.csv 변경시간 저장하는 sharedPreferenceManager 클래스
+ */
 class SharedPreferenceManager(
     private val sharedPreferences: SharedPreferences
 ): PreferenceManager {

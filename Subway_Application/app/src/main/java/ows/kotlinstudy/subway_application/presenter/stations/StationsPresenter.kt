@@ -6,7 +6,14 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ows.kotlinstudy.subway_application.data.repository.StationRepository
 import ows.kotlinstudy.subway_application.domain.Station
+import kotlin.coroutines.CoroutineContext
 
+/**
+ * View에서 Presenter로 생명주기 또는 클릭 이벤트 통지
+ * 1. onViewCreated()
+ * 2. onDestoryView()
+ * 3. filterStations(query: String)
+ */
 class StationsPresenter(
     private val view: StationsContract.View,
     private val stationRepository: StationRepository

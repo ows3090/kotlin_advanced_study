@@ -16,6 +16,8 @@
         android:elevation="4dp"
         app:contentInsetStartWithNavigation="0dp" />
 
+    // name: NavHost 구현체의 클래스 이름 포함
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/mainNavigationHostContainer"
         android:name="androidx.navigation.fragment.NavHostFragment"

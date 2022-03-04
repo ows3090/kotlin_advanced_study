@@ -95,6 +95,8 @@ class StationsFragment: ScopeFragment(), StationsContract.View {
         }
     }
 
+
+    // StationArrivalsFragment로 이동 시 hideKeyboard 호출 -> InputManager가 담당
     private fun hideKeyboard() {
         val inputMethodManager = context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
