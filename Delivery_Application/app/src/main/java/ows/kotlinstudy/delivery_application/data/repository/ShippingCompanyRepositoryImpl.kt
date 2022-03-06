@@ -1,5 +1,6 @@
 package ows.kotlinstudy.delivery_application.data.repository
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import ows.kotlinstudy.delivery_application.data.api.SweetTrackerApi
@@ -28,6 +29,7 @@ class ShippingCompanyRepositoryImpl(
         if (lastDatabaseUpdatedTimeMilles == null ||
             CACHE_MAX_AGE_MILLIS < (currentTimeMillis - lastDatabaseUpdatedTimeMilles)
         ) {
+            Log.d("msg","${trackerApi.getShippingCompanies().body()}")
             val shippingCompanies = trackerApi.getShippingCompanies()
                 .body()
                 ?.shippingCompanies

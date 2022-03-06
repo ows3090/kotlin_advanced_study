@@ -17,6 +17,9 @@ import ows.kotlinstudy.delivery_application.data.repository.ShippingCompanyRepos
 import ows.kotlinstudy.delivery_application.data.repository.ShippingCompanyRepositoryImpl
 import ows.kotlinstudy.delivery_application.data.repository.TrackingItemRepository
 import ows.kotlinstudy.delivery_application.data.repository.TrackingItemRepositoryImpl
+import ows.kotlinstudy.delivery_application.presenter.addtrackingitem.AddTrackingItemFragment
+import ows.kotlinstudy.delivery_application.presenter.addtrackingitem.AddTrackingItemPresenter
+import ows.kotlinstudy.delivery_application.presenter.addtrackingitem.AddTrackingItemsContract
 import ows.kotlinstudy.delivery_application.presenter.trackingitems.TrackingItemsContract
 import ows.kotlinstudy.delivery_application.presenter.trackingitems.TrackingItemsFragment
 import ows.kotlinstudy.delivery_application.presenter.trackingitems.TrackingItemsPresenter
@@ -71,5 +74,8 @@ val appModule = module {
     // Presenter
     scope<TrackingItemsFragment> {
         scoped<TrackingItemsContract.Presenter> { TrackingItemsPresenter(getSource(), get()) }
+    }
+    scope<AddTrackingItemFragment> {
+        scoped<AddTrackingItemsContract.Presenter> { AddTrackingItemPresenter(getSource(),get(), get()) }
     }
 }
