@@ -11,6 +11,9 @@ import ows.kotlinstudy.delivery_application.data.api.Url
 import ows.kotlinstudy.delivery_application.data.db.AppDatabase
 import ows.kotlinstudy.delivery_application.data.repository.TrackingItemRepository
 import ows.kotlinstudy.delivery_application.data.repository.TrackingItemRepositoryImpl
+import ows.kotlinstudy.delivery_application.presenter.trackingitems.TrackingItemsContract
+import ows.kotlinstudy.delivery_application.presenter.trackingitems.TrackingItemsFragment
+import ows.kotlinstudy.delivery_application.presenter.trackingitems.TrackingItemsPresenter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
@@ -53,4 +56,8 @@ val appModule = module {
     single<TrackingItemRepository> { TrackingItemRepositoryImpl(get(), get(), get()) }
 
 
+    // Presenter
+    scope<TrackingItemsFragment> {
+        scoped<TrackingItemsContract.Presenter> { TrackingItemsPresenter(getSource(),get()) }
+    }
 }
