@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ows.kotlinstudy.delivery_application">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".DeliveryApplication"
         android:allowBackup="true"
@@ -9,7 +11,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Delivery_Application">
+        android:theme="@style/Theme.Delivery_Application"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".presenter.MainActivity"
             android:exported="true">

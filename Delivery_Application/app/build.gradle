@@ -17,6 +17,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "SWEET_TRACKER_API_KEY", project.properties["SWEET_TRACKER_API_KEY"]
     }
 
     buildTypes {
