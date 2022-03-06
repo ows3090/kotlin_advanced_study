@@ -2,6 +2,8 @@ package ows.kotlinstudy.delivery_application.data.api
 
 
 import ows.kotlinstudy.delivery_application.BuildConfig
+import ows.kotlinstudy.delivery_application.data.entity.ShippingCompanies
+import ows.kotlinstudy.delivery_application.data.entity.ShippingCompany
 import ows.kotlinstudy.delivery_application.data.entity.TrackingInformation
 import retrofit2.Response
 import retrofit2.http.GET
@@ -16,6 +18,8 @@ interface SweetTrackerApi {
     ): Response<TrackingInformation>
 
 
+    @GET("api/v1/companylist?t_key=${BuildConfig.SWEET_TRACKER_API_KEY}")
+    suspend fun getShippingCompanies(): Response<ShippingCompanies>
 
 
 }
