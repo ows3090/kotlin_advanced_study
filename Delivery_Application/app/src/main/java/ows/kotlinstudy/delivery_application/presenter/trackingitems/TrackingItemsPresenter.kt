@@ -1,5 +1,6 @@
 package ows.kotlinstudy.delivery_application.presenter.trackingitems
 
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ows.kotlinstudy.delivery_application.data.entity.TrackingInformation
 import ows.kotlinstudy.delivery_application.data.entity.TrackingItem
@@ -12,6 +13,17 @@ class TrackingItemsPresenter(
 ): TrackingItemsContract.Presenter{
 
     override var trackingItemInformation: List<Pair<TrackingItem, TrackingInformation>> = emptyList()
+
+    init {
+        scope.launch {
+            /**
+             * LiveData의 observable과 유사
+             */
+            trackingItemRepository
+                .trackingItems
+                .collect { refresh() }
+        }
+    }
 
     override fun onViewCreated() {
         fetchTrackingInformation()
