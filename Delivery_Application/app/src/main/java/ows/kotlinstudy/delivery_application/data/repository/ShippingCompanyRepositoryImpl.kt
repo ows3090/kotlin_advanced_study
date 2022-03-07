@@ -29,7 +29,6 @@ class ShippingCompanyRepositoryImpl(
         if (lastDatabaseUpdatedTimeMilles == null ||
             CACHE_MAX_AGE_MILLIS < (currentTimeMillis - lastDatabaseUpdatedTimeMilles)
         ) {
-            Log.d("msg","${trackerApi.getShippingCompanies().body()}")
             val shippingCompanies = trackerApi.getShippingCompanies()
                 .body()
                 ?.shippingCompanies

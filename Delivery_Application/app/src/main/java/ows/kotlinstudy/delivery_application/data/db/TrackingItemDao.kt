@@ -1,9 +1,6 @@
 package ows.kotlinstudy.delivery_application.data.db
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import ows.kotlinstudy.delivery_application.data.entity.TrackingItem
 
@@ -24,4 +21,6 @@ interface TrackingItemDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: TrackingItem)
 
+    @Delete
+    suspend fun delete(item: TrackingItem)
 }

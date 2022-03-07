@@ -56,4 +56,22 @@ class TrackingItemRepositoryImpl(
         trackingItemDao.insert(trackingItem)
     }
 
+    override suspend fun getTrackingInformation(
+        companyCode: String,
+        invoice: String
+    ): TrackingInformation?  =
+        trackerApi.getTrackingInformation(companyCode, invoice)
+            .body()
+            ?.sortTrackingDetailsByTimeDescending()
+
+    override suspend fun deleteTrackingItem(trackingItem: TrackingItem) {
+        /**
+         * trackingItem의 primary key는 [invoice, code]
+         * 같은 key 데이터 삭제
+         */
+        trackingItemDao.delete(trackingItem)
+    }
+
+    private fun TrackingInformation.sortTrackingDetailsByTimeDescending() =
+        copy(trackingDetails = trackingDetails?.sortedByDescending { it.time ?: 0L })
 }

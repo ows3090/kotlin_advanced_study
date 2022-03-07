@@ -11,6 +11,8 @@ import org.koin.dsl.module
 import ows.kotlinstudy.delivery_application.data.api.SweetTrackerApi
 import ows.kotlinstudy.delivery_application.data.api.Url
 import ows.kotlinstudy.delivery_application.data.db.AppDatabase
+import ows.kotlinstudy.delivery_application.data.entity.TrackingInformation
+import ows.kotlinstudy.delivery_application.data.entity.TrackingItem
 import ows.kotlinstudy.delivery_application.data.preference.PreferenceManager
 import ows.kotlinstudy.delivery_application.data.preference.SharedPreferenceManager
 import ows.kotlinstudy.delivery_application.data.repository.ShippingCompanyRepository
@@ -20,6 +22,9 @@ import ows.kotlinstudy.delivery_application.data.repository.TrackingItemReposito
 import ows.kotlinstudy.delivery_application.presenter.addtrackingitem.AddTrackingItemFragment
 import ows.kotlinstudy.delivery_application.presenter.addtrackingitem.AddTrackingItemPresenter
 import ows.kotlinstudy.delivery_application.presenter.addtrackingitem.AddTrackingItemsContract
+import ows.kotlinstudy.delivery_application.presenter.trackinghistory.TrackingHistoryContract
+import ows.kotlinstudy.delivery_application.presenter.trackinghistory.TrackingHistoryFragment
+import ows.kotlinstudy.delivery_application.presenter.trackinghistory.TrackingHistoryPresenter
 import ows.kotlinstudy.delivery_application.presenter.trackingitems.TrackingItemsContract
 import ows.kotlinstudy.delivery_application.presenter.trackingitems.TrackingItemsFragment
 import ows.kotlinstudy.delivery_application.presenter.trackingitems.TrackingItemsPresenter
@@ -77,5 +82,10 @@ val appModule = module {
     }
     scope<AddTrackingItemFragment> {
         scoped<AddTrackingItemsContract.Presenter> { AddTrackingItemPresenter(getSource(),get(), get()) }
+    }
+    scope<TrackingHistoryFragment> {
+        scoped<TrackingHistoryContract.Presenter> { (trackingItem: TrackingItem, trackingInformation: TrackingInformation) ->
+            TrackingHistoryPresenter(getSource(), get(),trackingItem, trackingInformation)
+        }
     }
 }
