@@ -1,5 +1,9 @@
 package ows.kotlinstudy.delivery_application.presenter.addtrackingitem
 
+import android.app.AlertDialog
+import android.content.ClipDescription
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.view.children
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -36,6 +41,8 @@ class AddTrackingItemFragment: ScopeFragment(), AddTrackingItemsContract.View {
         super.onViewCreated(view, savedInstanceState)
         bindView()
         presenter.onViewCreated()
+
+        changeInvoiceIfAvailable()
     }
 
     override fun onDestroyView() {
@@ -101,12 +108,10 @@ class AddTrackingItemFragment: ScopeFragment(), AddTrackingItemsContract.View {
 
     private fun bindView(){
         binding?.chipGroup?.setOnCheckedChangeListener { group, checkedId ->
-            Log.d("msg","setOnCheckedChangeListener")
             presenter.changeSelectedShippingCompany(group.findViewById<Chip>(checkedId).text.toString())
         }
 
         binding?.invoiceEditText?.addTextChangedListener { editable ->
-            Log.d("msg","addTextChangedListener")
             presenter.changeShippingInvoice(editable.toString())
         }
 
@@ -115,8 +120,52 @@ class AddTrackingItemFragment: ScopeFragment(), AddTrackingItemsContract.View {
         }
     }
 
+    override fun showRecommendCompanyLoadingIndicator() {
+        binding?.recommandProgressBar?.toVisible()
+    }
+
+    override fun hideRecommendCompanyLoadingIndicator() {
+        binding?.recommandProgressBar?.toGone()
+    }
+
+    override fun showRecommendCompany(shippingCompany: ShippingCompany) {
+        binding?.chipGroup
+            ?.children
+            ?.filterIsInstance(Chip::class.java)
+            ?.forEach { chip ->
+                if(chip.text == shippingCompany.name){
+                    binding?.chipGroup?.apply { check(chip.id) }
+                    return@forEach
+                }
+            }
+    }
+
+    private fun changeInvoiceIfAvailable() {
+        val clipboard = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val invoice= clipboard.plainTextClip()
+        if(!invoice.isNullOrBlank()){
+            AlertDialog.Builder(requireContext())
+                .setTitle("클립 보드에 있는 ${invoice} 를 운송장 번호로 추가하시겠습니까?")
+                .setPositiveButton("추가할래요"){ _, _ ->
+                    binding?.invoiceEditText?.setText(invoice)
+                    presenter.fetchRecommendShippingCompany()
+                }
+                .setNegativeButton("안할래요"){ _, _ -> }
+                .create()
+                .show()
+        }
+
+    }
+
     private fun hideKeyboard(){
         val inputMethodManager = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
     }
+
+    private fun ClipboardManager.plainTextClip(): String? =
+        if(hasPrimaryClip() && (primaryClipDescription?.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) == true)){
+            primaryClip?.getItemAt(0)?.text?.toString()
+        }else{
+            null
+        }
 }

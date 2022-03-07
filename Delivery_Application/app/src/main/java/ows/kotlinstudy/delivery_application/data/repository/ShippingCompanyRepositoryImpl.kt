@@ -42,6 +42,18 @@ class ShippingCompanyRepositoryImpl(
         shippingCompanyDao.getAll()
     }
 
+    override suspend fun getRecommendShippingCompany(invoice: String): ShippingCompany? = withContext(dispatcher){
+        try{
+            // code가 낮을 수록 메이저 택배회사
+            trackerApi.getRecommendShippingCompanies(invoice)
+                .body()
+                ?.shippingCompanies
+                ?.minByOrNull { it.code.toIntOrNull() ?: Int.MAX_VALUE }
+        }catch (exception: Exception){
+            null
+        }
+    }
+
     companion object {
         private const val KEY_LAST_DATEBASE_UPDATED_TIME_MILLIS =
             "KEY_LAST_DATEBASE_UPDATED_TIME_MILLIS"
