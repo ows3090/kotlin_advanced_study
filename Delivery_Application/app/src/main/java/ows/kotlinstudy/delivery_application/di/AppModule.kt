@@ -28,6 +28,7 @@ import ows.kotlinstudy.delivery_application.presenter.trackinghistory.TrackingHi
 import ows.kotlinstudy.delivery_application.presenter.trackingitems.TrackingItemsContract
 import ows.kotlinstudy.delivery_application.presenter.trackingitems.TrackingItemsFragment
 import ows.kotlinstudy.delivery_application.presenter.trackingitems.TrackingItemsPresenter
+import ows.kotlinstudy.delivery_application.work.AppWorkerFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
@@ -75,6 +76,8 @@ val appModule = module {
     single<TrackingItemRepository> { TrackingItemRepositoryImpl(get(), get(), get()) }
     single<ShippingCompanyRepository> { ShippingCompanyRepositoryImpl(get(), get(), get(), get()) }
 
+    // Work
+    single { AppWorkerFactory(get(), get()) }
 
     // Presenter
     scope<TrackingItemsFragment> {

@@ -4,8 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.*
 import ows.kotlinstudy.delivery_application.R
 import ows.kotlinstudy.delivery_application.databinding.ActivityMainBinding
+import ows.kotlinstudy.delivery_application.work.TrackingCheckWorker
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
+        initWorker()
     }
 
     private fun initView() {
@@ -35,5 +40,40 @@ class MainActivity : AppCompatActivity() {
             (supportFragmentManager.findFragmentById(R.id.mainNavigationHostContainer) as NavHostFragment).navController
 
         binding.toolbar.setupWithNavController(navigationController)
+    }
+
+    private fun initWorker(){
+        val workerStartTime = Calendar.getInstance()
+        workerStartTime.set(Calendar.HOUR_OF_DAY, 16)
+        val initialDelay = workerStartTime.timeInMillis - System.currentTimeMillis()
+
+
+        /**
+         * 주기적으로 workRequest ->  1일 단위로 반복
+         * 1. setInitailDealy : 초기 지연 시간, 16시에 실행
+         * 2. BackOff 정책 : 실패 후 다시 실행되는 정책
+         */
+        val dailyTrackingCheckRequest =
+            PeriodicWorkRequestBuilder<TrackingCheckWorker>(1, TimeUnit.DAYS)
+                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+                .setBackoffCriteria(
+                    BackoffPolicy.LINEAR,
+                    PeriodicWorkRequest.MIN_BACKOFF_MILLIS,
+                    TimeUnit.MILLISECONDS
+                )
+                .build()
+
+        /**
+         * Unique한 이름을 가진 작업 실행
+         * 1. Unique Name
+         * 2. 이름 충돌 시 정책
+         * 3. 작업 단위 객체 Worker
+         */
+        WorkManager.getInstance(this)
+            .enqueueUniquePeriodicWork(
+                "DailyTrackingCheck",
+                ExistingPeriodicWorkPolicy.KEEP,
+                dailyTrackingCheckRequest
+            )
     }
 }
