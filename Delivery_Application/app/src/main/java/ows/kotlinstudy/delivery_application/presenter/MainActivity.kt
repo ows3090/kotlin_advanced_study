@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
          * 기존에 액티비티에 프래그먼트를 호스팅 하는 일반적인 방법 -> FrameLayout
          * androidx.fragment 1.2.0 이후 -> FragmentContainerView
          *
-         * FragmentContainerView는 1회성 작업 수행
+         * FragmentContainerView는 android:name 속성을 통해서 Fragment 추가 가능 -> 이후 1회성 작업
          * 1. 프래그먼트의 새로운 인스턴스 생성
          * 2. Fragment.onInflate(Context, AttributeSet, Bundle) 호출
          * 3. 프래그먼트를 프래그먼트 매니저에 추가하기 위한 트랙잭션 수행
@@ -39,6 +39,9 @@ class MainActivity : AppCompatActivity() {
         val navigationController =
             (supportFragmentManager.findFragmentById(R.id.mainNavigationHostContainer) as NavHostFragment).navController
 
+        /**
+         * fragment 라벨을 toolbar에 반영
+         */
         binding.toolbar.setupWithNavController(navigationController)
     }
 

@@ -54,7 +54,6 @@ class AddTrackingItemPresenter(
     }
 
     override fun changeShippingInvoice(invoice: String) {
-        Log.d("msg","changeShippingInvoice ${invoice}")
         this.invoice = invoice
         enableSaveButtonIfAvailable()
     }

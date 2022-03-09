@@ -154,7 +154,6 @@ class AddTrackingItemFragment: ScopeFragment(), AddTrackingItemsContract.View {
                 .create()
                 .show()
         }
-
     }
 
     private fun hideKeyboard(){
@@ -162,6 +161,10 @@ class AddTrackingItemFragment: ScopeFragment(), AddTrackingItemsContract.View {
         inputMethodManager.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
     }
 
+    /**
+     * hasPrimaryClip : 클립보드에 데이터가 포함되어 있는지
+     * hasMimeType : primaryClip의 Mime Type 확인
+     */
     private fun ClipboardManager.plainTextClip(): String? =
         if(hasPrimaryClip() && (primaryClipDescription?.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) == true)){
             primaryClip?.getItemAt(0)?.text?.toString()
