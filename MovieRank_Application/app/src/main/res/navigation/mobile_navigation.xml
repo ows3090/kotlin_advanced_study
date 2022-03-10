@@ -29,7 +29,13 @@
 
     <fragment
         android:id="@+id/navigation_reviews"
-        android:name="ows.kotlinstudy.movierank_application.presentation.reviews.MovieReviewFragment"
+        android:name="ows.kotlinstudy.movierank_application.presentation.reviews.MovieReviewsFragment"
         android:label="@string/title_moviereview"
-        tools:layout="@layout/fragment_moviereview" />
+        tools:layout="@layout/fragment_moviereview">
+
+        <argument
+            android:name="movie"
+            app:argType="ows.kotlinstudy.movierank_application.domain.model.Movie"/>
+
+    </fragment>
 </navigation>

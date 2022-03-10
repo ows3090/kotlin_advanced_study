@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.android.scope.ScopeFragment
@@ -34,6 +35,7 @@ class HomeFragment : ScopeFragment(), HomeContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        bindViews()
         presenter.onViewCreated()
     }
 
@@ -77,6 +79,15 @@ class HomeFragment : ScopeFragment(), HomeContract.View {
             val gridLayoutManager = createGridLayoutManager()
             layoutManager = gridLayoutManager
             addItemDecoration(GridSpacingItemDecoration(gridLayoutManager.spanCount, dip(6f)))
+        }
+    }
+
+    private fun bindViews(){
+        (binding?.recyclerView?.adapter as? HomeAdapter)?.apply {
+            onMovieClickListener = {movie ->
+                val action = HomeFragmentDirections.toMovieReviewsAction(movie)
+                findNavController().navigate(action)
+            }
         }
     }
 

@@ -12,12 +12,16 @@ import ows.kotlinstudy.movierank_application.data.repository.MovieRepository
 import ows.kotlinstudy.movierank_application.data.repository.MovieRepositoryImpl
 import ows.kotlinstudy.movierank_application.data.repository.ReviewRepository
 import ows.kotlinstudy.movierank_application.data.repository.ReviewRepositoryImpl
+import ows.kotlinstudy.movierank_application.domain.model.Movie
 import ows.kotlinstudy.movierank_application.domain.usecase.GetAllMoviesUseCase
 import ows.kotlinstudy.movierank_application.domain.usecase.GetAllReviewsUseCase
 import ows.kotlinstudy.movierank_application.domain.usecase.GetRandomFeaturedMovieUseCase
 import ows.kotlinstudy.movierank_application.presentation.home.HomeContract
 import ows.kotlinstudy.movierank_application.presentation.home.HomeFragment
 import ows.kotlinstudy.movierank_application.presentation.home.HomePresenter
+import ows.kotlinstudy.movierank_application.presentation.reviews.MovieReviewsContract
+import ows.kotlinstudy.movierank_application.presentation.reviews.MovieReviewsFragment
+import ows.kotlinstudy.movierank_application.presentation.reviews.MovieReviewsPresenter
 
 val appModule = module {
     single { Dispatchers.IO }
@@ -42,5 +46,8 @@ val domainModule = module {
 val presenterModule = module {
     scope<HomeFragment> {
         scoped<HomeContract.Presenter> { HomePresenter(getSource(), get(), get()) }
+    }
+    scope<MovieReviewsFragment> {
+        scoped<MovieReviewsContract.Presenter> { (movie: Movie) -> MovieReviewsPresenter(getSource(),movie, get()) }
     }
 }

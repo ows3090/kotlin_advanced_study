@@ -1,10 +1,13 @@
 package ows.kotlinstudy.movierank_application.domain.model
 
+import android.os.Parcelable
 import com.google.firebase.firestore.DocumentId
+import kotlinx.parcelize.Parcelize
 
 /**
  * FireStore에서 사용하는 객체는 default 생성자가 존재해야 한다.
  */
+@Parcelize
 data class Movie(
     @DocumentId
     val id: String? = null,
@@ -27,4 +30,4 @@ data class Movie(
     val numberOfScore: Int? = null,
     val releaseYear: Int? = null,
     val runtime: Int? = null
-)
+): Parcelable
