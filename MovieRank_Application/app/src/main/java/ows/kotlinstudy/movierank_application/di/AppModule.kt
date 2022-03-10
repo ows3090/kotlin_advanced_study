@@ -13,6 +13,7 @@ import ows.kotlinstudy.movierank_application.data.repository.MovieRepositoryImpl
 import ows.kotlinstudy.movierank_application.data.repository.ReviewRepository
 import ows.kotlinstudy.movierank_application.data.repository.ReviewRepositoryImpl
 import ows.kotlinstudy.movierank_application.domain.usecase.GetAllMoviesUseCase
+import ows.kotlinstudy.movierank_application.domain.usecase.GetAllReviewsUseCase
 import ows.kotlinstudy.movierank_application.domain.usecase.GetRandomFeaturedMovieUseCase
 import ows.kotlinstudy.movierank_application.presentation.home.HomeContract
 import ows.kotlinstudy.movierank_application.presentation.home.HomeFragment
@@ -35,6 +36,7 @@ val dataModule = module {
 val domainModule = module {
     factory { GetRandomFeaturedMovieUseCase(get(), get()) }
     factory { GetAllMoviesUseCase(get()) }
+    factory { GetAllReviewsUseCase(get()) }
 }
 
 val presenterModule = module {

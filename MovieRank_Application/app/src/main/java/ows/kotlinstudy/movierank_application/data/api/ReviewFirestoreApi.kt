@@ -18,8 +18,8 @@ class ReviewFirestoreApi(
      * 따라서 복한 indexing이 필요한 경우에는 요청
      * firestore에서는 에러가 나타날 경우 복합 색인 자동 생성
      */
-    override suspend fun getLatestReview(movieId: String): Review? {
-        return firestore.collection("reviews")
+    override suspend fun getLatestReview(movieId: String): Review? =
+        firestore.collection("reviews")
             .whereEqualTo("movieId", movieId)
             .orderBy("createdAt", Query.Direction.DESCENDING)
             .limit(1)
@@ -27,6 +27,12 @@ class ReviewFirestoreApi(
             .await()
             .map { it.toObject<Review>() }
             .firstOrNull()
-    }
 
+    override suspend fun getAllReviews(movieId: String): List<Review> =
+        firestore.collection("reviews")
+            .whereEqualTo("movieId", movieId)
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .get()
+            .await()
+            .map { it.toObject<Review>() }
 }
