@@ -8,6 +8,7 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import ows.kotlinstudy.movierank_application.di.appModule
+import ows.kotlinstudy.movierank_application.utility.MovieDataGenerator
 
 class MovieRankApplication: Application() {
 
@@ -25,5 +26,7 @@ class MovieRankApplication: Application() {
             )
             modules(appModule)
         }
+
+        MovieDataGenerator().generate()
     }
 }

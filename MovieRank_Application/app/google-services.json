@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "23143129841",
+    "project_id": "movierank-applicaiton",
+    "storage_bucket": "movierank-applicaiton.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23143129841:android:3b4d579365dc1fdfde3f50",
+        "android_client_info": {
+          "package_name": "ows.kotlinstudy.movierank_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "23143129841-ovrnp5iqqm9v0u3emhlohqf729q9i5jm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCqarEa9oY82LklW-xc911PRujG2Ch1OE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "23143129841-ovrnp5iqqm9v0u3emhlohqf729q9i5jm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
