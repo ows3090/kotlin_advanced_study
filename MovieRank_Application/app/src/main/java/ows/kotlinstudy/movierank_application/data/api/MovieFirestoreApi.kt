@@ -1,5 +1,6 @@
 package ows.kotlinstudy.movierank_application.data.api
 
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
@@ -19,4 +20,14 @@ class MovieFirestoreApi(
             .await()
             .map { it.toObject<Movie>() }
 
+    /**
+     * whereIn : 해당 컬렉션 안에 포함되어 있는지를 쿼리해주는 메소드
+     * documentId로 쿼리 하기위해서는 FieldPath.documentId() 사용
+     */
+    override suspend fun getMovies(movieIds: List<String>): List<Movie> =
+        firestore.collection("movies")
+            .whereIn(FieldPath.documentId(), movieIds)
+            .get()
+            .await()
+            .map { it.toObject<Movie>() }
 }
