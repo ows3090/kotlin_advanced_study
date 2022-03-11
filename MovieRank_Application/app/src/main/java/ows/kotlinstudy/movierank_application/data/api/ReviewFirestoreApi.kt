@@ -38,7 +38,7 @@ class ReviewFirestoreApi(
 
     override suspend fun getAllUserReviews(userId: String): List<Review> =
         firestore.collection("reviews")
-            .whereEqualTo("userid",userId)
+            .whereEqualTo("userId",userId)
             .orderBy("createdAt",Query.Direction.DESCENDING)
             .get()
             .await()

@@ -1,5 +1,6 @@
 package ows.kotlinstudy.movierank_application.domain.usecase
 
+import android.util.Log
 import ows.kotlinstudy.movierank_application.data.repository.MovieRepository
 import ows.kotlinstudy.movierank_application.data.repository.ReviewRepository
 import ows.kotlinstudy.movierank_application.data.repository.UserRepository
@@ -20,10 +21,12 @@ class GetMyReviewedMoviesUseCase(
             return emptyList()
         }
 
+        Log.d("msg","${user.id!!} ${reviewRepository.getAllUserReviews(user.id!!)}")
         val reviews = reviewRepository.getAllUserReviews(user.id!!)
             .filter { it.movieId.isNullOrBlank().not() }
 
         if (reviews.isNullOrEmpty()) {
+            Log.d("msg","GetMyReviewedMoviesUseCase reviews null")
             return emptyList()
         }
 

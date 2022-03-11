@@ -18,6 +18,9 @@ import ows.kotlinstudy.movierank_application.domain.usecase.GetRandomFeaturedMov
 import ows.kotlinstudy.movierank_application.presentation.home.HomeContract
 import ows.kotlinstudy.movierank_application.presentation.home.HomeFragment
 import ows.kotlinstudy.movierank_application.presentation.home.HomePresenter
+import ows.kotlinstudy.movierank_application.presentation.mypage.MyPageContract
+import ows.kotlinstudy.movierank_application.presentation.mypage.MyPageFragment
+import ows.kotlinstudy.movierank_application.presentation.mypage.MyPagePresenter
 import ows.kotlinstudy.movierank_application.presentation.reviews.MovieReviewsContract
 import ows.kotlinstudy.movierank_application.presentation.reviews.MovieReviewsFragment
 import ows.kotlinstudy.movierank_application.presentation.reviews.MovieReviewsPresenter
@@ -60,5 +63,9 @@ val presenterModule = module {
                 get()
             )
         }
+    }
+
+    scope<MyPageFragment> {
+        scoped<MyPageContract.Presenter> { MyPagePresenter(getSource(), get()) }
     }
 }
