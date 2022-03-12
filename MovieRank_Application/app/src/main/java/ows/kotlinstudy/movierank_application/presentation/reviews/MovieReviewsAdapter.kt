@@ -15,6 +15,17 @@ import ows.kotlinstudy.movierank_application.domain.model.Review
 import ows.kotlinstudy.movierank_application.extension.toAbbreviatedString
 import ows.kotlinstudy.movierank_application.extension.toDecimalFormatString
 
+/**
+ * RecyclerView에 다른 View들을 추가
+ * -> index 수치를 조정하여 계산
+ *
+ * Actual Data -> Adapter View
+ *              0: Header
+ * 0: review -> 1: review
+ * 1: review -> 2: review
+ * 2: review -> 3: review
+ * 3: review -> 4: review
+ */
 class MovieReviewsAdapter(private val movie: Movie) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -26,21 +37,28 @@ class MovieReviewsAdapter(private val movie: Movie) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         when (viewType) {
+            // Movie 정보를 나타내는 ViewHolder 클래스
             ITEM_VIEW_TYPE_HEADER -> {
                 MovieInformationViewHolder(
                     ItemMovieInformationBinding
                         .inflate(LayoutInflater.from(parent.context), parent, false)
                 )
             }
+
+            // 다른 사람의 Review List의 item을 나타내는 ViewHolder 클래스
             ITEM_VIEW_TYPE_ITEM -> {
                 ReviewViewHolder(parent)
             }
+
+            // 내가 리뷰를 하지 않을 때 리뷰 작성을 위해 나타내는 ViewHolder 클래스
             ITEM_VIEW_TYPE_REVIEW_FROM -> {
                 ReviewFormViewHolder(
                     ItemReviewFormBinding
                         .inflate(LayoutInflater.from(parent.context), parent, false)
                 )
             }
+
+            // 나의 리뷰를 보여주는 ViewHolder 클래스
             ITEM_VIEW_TYPE_MY_REVIEW -> {
                 MyReviewViewHolder(
                     ItemMyReviewBinding
@@ -83,6 +101,9 @@ class MovieReviewsAdapter(private val movie: Movie) :
             else -> ITEM_VIEW_TYPE_ITEM
         }
 
+    /**
+     * Movie 정보를 보여주기 위한 ViewHolder
+     */
     inner class MovieInformationViewHolder(private val binding: ItemMovieInformationBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -110,6 +131,9 @@ class MovieReviewsAdapter(private val movie: Movie) :
         }
     }
 
+    /**
+     * Others Review Item들을 보여주기 위한 ViewHolder
+     */
     inner class ReviewViewHolder(
         parent: ViewGroup,
         private val binding: ItemReviewBinding = ItemReviewBinding.inflate(
@@ -128,6 +152,9 @@ class MovieReviewsAdapter(private val movie: Movie) :
         }
     }
 
+    /**
+     * Review 작성을 위한 ViewHolder
+     */
     inner class ReviewFormViewHolder(private val binding: ItemReviewFormBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -145,6 +172,9 @@ class MovieReviewsAdapter(private val movie: Movie) :
         }
     }
 
+    /**
+     * My Review를 보기 위한 ViewHolder
+     */
     inner class MyReviewViewHolder(private val binding: ItemMyReviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 

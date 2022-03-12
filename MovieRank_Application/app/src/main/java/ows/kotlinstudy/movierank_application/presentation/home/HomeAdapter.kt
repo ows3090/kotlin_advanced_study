@@ -18,6 +18,17 @@ import ows.kotlinstudy.movierank_application.extension.dip
 import ows.kotlinstudy.movierank_application.extension.toAbbreviatedString
 import ows.kotlinstudy.movierank_application.extension.toDecimalFormatString
 
+/**
+ * RecyclerView에 다른 View들을 추가
+ * -> DataSet를 변형하여 다른 ViewHolder에 공통의 데이터 전달하여 화면 표시
+ *
+ * Actual Data -> Adapter View
+ * 0: Header -> 0: Header
+ * 0: review -> 1: review
+ * 1: review -> 2: review
+ * 2: review -> 3: review
+ * 4: Footer -> 4: Footer
+ */
 class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var data: List<DataItem> = emptyList()

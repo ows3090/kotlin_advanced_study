@@ -87,6 +87,11 @@ class ReviewFirestoreApi(
         return newReviewReference.get().await().toObject<Review>()!!
     }
 
+    /**
+     * TODO firestore 데이터 추가
+     * 1. add
+     * 2. set -> Reference를 먼저 가져온 후, 데이터 setting
+     */
     override suspend fun removeReview(review: Review) {
         val reviewReference = firestore.collection("reviews").document(review.id!!)
         val movieReference = firestore.collection("movies").document(review.movieId!!)
