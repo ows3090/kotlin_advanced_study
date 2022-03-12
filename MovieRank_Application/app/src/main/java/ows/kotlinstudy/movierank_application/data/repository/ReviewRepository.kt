@@ -9,4 +9,6 @@ interface ReviewRepository {
     suspend fun getAllReviews(movieId: String): List<Review>
 
     suspend fun getAllUserReviews(userId: String): List<Review>
+
+    suspend fun addReview(review: Review): Review
 }

@@ -21,4 +21,8 @@ class ReviewRepositoryImpl(
     override suspend fun getAllUserReviews(userId: String): List<Review> = withContext(dispatchers){
         reviewApi.getAllUserReviews(userId)
     }
+
+    override suspend fun addReview(review: Review): Review = withContext(dispatchers){
+        reviewApi.addReview(review)
+    }
 }
