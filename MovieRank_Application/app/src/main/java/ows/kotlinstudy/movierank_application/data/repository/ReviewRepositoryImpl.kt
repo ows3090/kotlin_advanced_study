@@ -25,4 +25,8 @@ class ReviewRepositoryImpl(
     override suspend fun addReview(review: Review): Review = withContext(dispatchers){
         reviewApi.addReview(review)
     }
+
+    override suspend fun removeReview(review: Review) {
+        reviewApi.removeReview(review)
+    }
 }

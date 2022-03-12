@@ -11,10 +11,7 @@ import ows.kotlinstudy.movierank_application.data.preference.PreferenceManager
 import ows.kotlinstudy.movierank_application.data.preference.SharedPreferenceManager
 import ows.kotlinstudy.movierank_application.data.repository.*
 import ows.kotlinstudy.movierank_application.domain.model.Movie
-import ows.kotlinstudy.movierank_application.domain.usecase.GetAllMoviesUseCase
-import ows.kotlinstudy.movierank_application.domain.usecase.GetAllReviewsUseCase
-import ows.kotlinstudy.movierank_application.domain.usecase.GetMyReviewedMoviesUseCase
-import ows.kotlinstudy.movierank_application.domain.usecase.GetRandomFeaturedMovieUseCase
+import ows.kotlinstudy.movierank_application.domain.usecase.*
 import ows.kotlinstudy.movierank_application.presentation.home.HomeContract
 import ows.kotlinstudy.movierank_application.presentation.home.HomeFragment
 import ows.kotlinstudy.movierank_application.presentation.home.HomePresenter
@@ -47,8 +44,10 @@ val dataModule = module {
 val domainModule = module {
     factory { GetRandomFeaturedMovieUseCase(get(), get()) }
     factory { GetAllMoviesUseCase(get()) }
-    factory { GetAllReviewsUseCase(get()) }
+    factory { GetAllReviewsUseCase(get(), get()) }
     factory { GetMyReviewedMoviesUseCase(get(), get(), get()) }
+    factory { SubmitReviewUseCase(get(), get()) }
+    factory { DeleteReviewUseCase(get()) }
 }
 
 val presenterModule = module {
@@ -60,6 +59,8 @@ val presenterModule = module {
             MovieReviewsPresenter(
                 getSource(),
                 movie,
+                get(),
+                get(),
                 get()
             )
         }
