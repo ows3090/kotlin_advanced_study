@@ -11,7 +11,6 @@ import ows.kotlinstudy.shopping_application.utility.DateConverter
     version = 1,
     exportSchema = false
 )
-
 @TypeConverters(DateConverter::class)
 abstract class ProductDatabase: RoomDatabase() {
 

@@ -2,6 +2,7 @@ package ows.kotlinstudy.shopping_application.data.preference
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 class PreferenceManager(
     private val context: Context
@@ -72,6 +73,8 @@ class PreferenceManager(
     }
 
     fun removeKey(key: String?){
+        prefs.edit {
+        }
         editor.remove(key)
         editor.apply()
     }

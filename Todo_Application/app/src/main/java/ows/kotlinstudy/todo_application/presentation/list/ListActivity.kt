@@ -104,6 +104,7 @@ internal class ListActivity : BaseActivity<ListViewModel>(), CoroutineScope {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        Activ
         if(requestCode == DetailActivity.FETCH_REQUEST_CODE && resultCode == RESULT_OK){
             viewModel.fetchData()
         }

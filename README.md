@@ -27,8 +27,16 @@
 2. Test Driven Development(Mockito)
 3. Coroutine
 4. Koin
-5. Room
-6. Jetpack(LiveData, ViewModel)
+5. Jetpack(LiveData, ViewModel, Room)
 
 <br>
 
+## Shopping_Application
+1. Clean Architecture
+2. OAuth(Firebase, Google Login)
+3. Coroutine
+4. Glide
+5. Koin
+6. Jetpack(LiveData, ViewModel, Room)
+7. Retrofit, Okhttp3
+8. SwipeLayout

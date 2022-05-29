@@ -24,6 +24,7 @@ internal fun provideProductRetrofit(
         .build()
 }
 
+// 데이터 직렬화 과정에서 네이밍 일치시키기 위한 규칙
 internal fun provideGsonConverterFactory(): GsonConverterFactory {
     return GsonConverterFactory.create(
         GsonBuilder()
