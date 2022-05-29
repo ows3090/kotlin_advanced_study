@@ -4,18 +4,31 @@
 2. Increased productivity
 3. Ease of testing
 4. Provides direction for application development.
+
 <br>
 
-## Clean Architecutre Rule -> SOLID
-S. Single Resoponsibility Principle
+## Clean Architecture
+1. Presentation Layer
+	- View : Activity, Fragment
+	- Presenter : Controller, Presenter, ViewModel
 
-O. Open Closed Principle
+2. Domain Layer
+	- UseCase
+	- Translater(Entity -> Model)
 
-L. Liskov Substitution Principle
+3. Data Layer
+	- Repository : Domain과 Data Store, Remote Layer를 연결
+	- Entitiy : 최소단위 비즈니스 객체
 
-I. Interface Segregation Principle
-
-D. Dependency Inversion Principle
 <br>
 
+## Todo_Application
+1. Clean Architecture
+2. Test Driven Development(Mockito)
+3. Coroutine
+4. Koin
+5. Room
+6. Jetpack(LiveData, ViewModel)
+
+<br>
 
