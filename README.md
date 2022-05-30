@@ -40,3 +40,10 @@
 6. Jetpack(LiveData, ViewModel, Room)
 7. Retrofit, Okhttp3
 8. SwipeLayout
+
+<br>
+
+## Camera_Application
+1. Camerx(Preview, ImageCapture)
+2. Glide
+3. Circle Indicator, ViewPager2

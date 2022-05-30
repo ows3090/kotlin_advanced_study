@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
 
             // 카메라의 이미지를 캡처할 수 있는 imageCapture Builder 초기화
             val imageCaptureBuilder = ImageCapture.Builder()
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)     // 지연 초기화 모드
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)     // 지연 최소화 모드
                 .setTargetAspectRatio(AspectRatio.RATIO_4_3)
                 .setTargetRotation(rotation)
                 .setFlashMode(FLASH_MODE_AUTO)      // 플래쉬
