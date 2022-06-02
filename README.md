@@ -59,3 +59,14 @@
 6. Content Provider
 
 <br>
+
+## Subway_Application
+1. MVP with Clean Architecture
+2. Firebase (Storage)
+3. Coroutine (Flow)
+4. Koin
+5. Jetpack (Navigation, Room)
+6. Retrofit
+
+<br>
+

@@ -14,7 +14,7 @@ interface BasePresenter {
 
     fun onDestroyView()
 
-    // @CallSuper : 상속받은 메소드에 super method를 invoke 강제화 적
+    // @CallSuper : 상속받은 메소드에 super method를 invoke 강제화ß
     @CallSuper
     fun onDestroy(){
         scope.cancel()
