@@ -78,5 +78,6 @@ class MainActivity : AppCompatActivity() {
                 ExistingPeriodicWorkPolicy.KEEP,
                 dailyTrackingCheckRequest
             )
+
     }
 }
