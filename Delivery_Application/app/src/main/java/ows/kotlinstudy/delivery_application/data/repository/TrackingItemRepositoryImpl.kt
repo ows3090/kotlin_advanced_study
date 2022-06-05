@@ -20,8 +20,7 @@ class TrackingItemRepositoryImpl(
     override val trackingItems: Flow<List<TrackingItem>> =
         trackingItemDao.allTrackingItems().distinctUntilChanged()
 
-    override suspend fun getTrackingItemInformation(): List<Pair<TrackingItem, TrackingInformation>> =
-        withContext(dispatcher) {
+    override suspend fun getTrackingItemInformation(): List<Pair<TrackingItem, TrackingInformation>> = withContext(dispatcher) {
             trackingItemDao.getAll()
                 .mapNotNull { trackingItem ->
                     val relatedTrackingInfo = trackerApi.getTrackingInformation(

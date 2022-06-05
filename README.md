@@ -70,3 +70,11 @@
 
 <br>
 
+## Delivery_Applicatiion
+1. MVP with Clean Architecture
+2. Coroutine (Flow)
+3. Koin
+4. Jetpack (Navigation, Room,. WorkManager)
+5. Retrofit
+
+<br>
