@@ -44,8 +44,8 @@ class GridSpacingItemDecoration(
          *     0,1,2
          *     0,1,2
          *
-         * ex) spanCount = 2, spacing = 30
-         * itemHorizontalSpacing = 60
+         * ex) spanCount = 3, spacing = 30
+         * itemHorizontalSpacing = 40
          *
          */
         val column = (view.layoutParams as GridLayoutManager.LayoutParams).spanIndex

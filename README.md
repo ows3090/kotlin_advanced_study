@@ -78,3 +78,10 @@
 5. Retrofit
 
 <br>
+
+## MovieRank_Application
+1. MVP with Clean Architecture
+2. Firebase (FireStore, Indexing, Transaction)
+3. Coroutine
+4. Koin
+5. Glide

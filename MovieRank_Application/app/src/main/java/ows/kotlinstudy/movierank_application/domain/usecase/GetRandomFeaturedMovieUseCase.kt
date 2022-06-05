@@ -15,16 +15,13 @@ class GetRandomFeaturedMovieUseCase(
             .filter { it.id.isNullOrBlank().not() }
             .filter { it.isFeatured == true }
 
-        Log.d("msg","GetRandomFeaturedMovieUseCase ${featuredMovies}")
-
-        if(featuredMovies.isNullOrEmpty()){
+        if (featuredMovies.isNullOrEmpty()) {
             return null
         }
 
         return featuredMovies.random()
             .let { movie ->
                 val latesReview = reviewRepository.getLatestReview(movie.id!!)
-                Log.d("msg","latesReview ${latesReview}")
                 FeaturedMovie(movie, latesReview)
             }
     }

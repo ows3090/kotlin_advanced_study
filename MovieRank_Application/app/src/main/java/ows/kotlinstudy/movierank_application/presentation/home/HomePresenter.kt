@@ -25,7 +25,6 @@ class HomePresenter(
             view.showLoadingIndicator()
             val featuredMovie = getRandomFeaturedMovie()
             val movies = getAllMovies()
-
             view.showMovies(featuredMovie, movies)
         }catch (exception: Exception){
             exception.printStackTrace()

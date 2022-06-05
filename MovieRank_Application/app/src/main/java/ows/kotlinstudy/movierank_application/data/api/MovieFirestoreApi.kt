@@ -18,7 +18,7 @@ class MovieFirestoreApi(
         firestore.collection("movies")
             .get()
             .await()
-            .map { it.toObject<Movie>() }
+            .map { it.toObject() }
 
     /**
      * whereIn : 해당 컬렉션 안에 포함되어 있는지를 쿼리해주는 메소드
@@ -29,5 +29,5 @@ class MovieFirestoreApi(
             .whereIn(FieldPath.documentId(), movieIds)
             .get()
             .await()
-            .map { it.toObject<Movie>() }
+            .map { it.toObject() }
 }
